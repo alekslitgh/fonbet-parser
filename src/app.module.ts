@@ -1,15 +1,10 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { PrismaModule } from './prisma/prisma.module';
-import { RabbitmqModule } from './rabbitmq/rabbitmq.module';
-import { CronModule } from './cron/cron.module';
-import { ParserService } from './parser/parser.service';
+import { ScheduleModule } from '@nestjs/schedule';
 import { ParserModule } from './parser/parser.module';
+import { RabbitMQModule } from './rabbitmq/rabbitmq.module';
 
 @Module({
-  imports: [PrismaModule, RabbitmqModule, CronModule, ParserModule],
-  controllers: [AppController],
-  providers: [AppService, ParserService],
+  imports: [ScheduleModule.forRoot(), RabbitMQModule, ParserModule],
+  providers: [],
 })
 export class AppModule {}

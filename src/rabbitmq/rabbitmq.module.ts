@@ -1,7 +1,10 @@
 import { Module } from '@nestjs/common';
-import { RabbitmqService } from './rabbitmq.service';
+import { RabbitMQService } from './rabbitmq.service';
+import { SportsParserService } from 'src/parser/services/sports.parser.service';
+import { EventsParserService } from 'src/parser/services/events.parser.service';
 
 @Module({
-  providers: [RabbitmqService]
+  providers: [RabbitMQService, SportsParserService, EventsParserService],
+  exports: [RabbitMQService],
 })
-export class RabbitmqModule {}
+export class RabbitMQModule {}

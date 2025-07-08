@@ -1,15 +1,46 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
-  provider = "postgresql"
-  output   = "../generated/prisma"
+  provider = "prisma-client-js"
+  output   = "../node_modules/.prisma/client"
 }
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url      = "postgresql://postgres:postgres@localhost:5432/fonbet_db?schema=public"
+}
+
+model Sport {
+  id          Int       @id @default(autoincrement())
+  fonbetId    Int       @unique
+  name        String
+  alias       String?
+  childIds    Int[]
+  events      Event[]   @relation("SportToEvents")
+  
+  @@map("sports")
+  @@unique([name, alias])
+}
+
+model Event {
+  id               Int       @id @default(autoincrement())
+  fonbetId         Int       @unique
+  sortOrder        String
+  level            Int
+  num              Int
+  sportId          Int
+  kind             Int
+  rootKind         Int
+  team1Id          Int?
+  team2Id          Int?
+  team1            String?
+  team2            String?
+  name             String?
+  startTime        DateTime
+  place            String
+  priority         Int
+  parentId         Int?
+  parent           Event?    @relation("EventToChildren", fields: [parentId], references: [fonbetId])
+  children         Event[]   @relation("EventToChildren")
+  sports           Sport[]   @relation("SportToEvents")
+
+  @@map("events")
 }
